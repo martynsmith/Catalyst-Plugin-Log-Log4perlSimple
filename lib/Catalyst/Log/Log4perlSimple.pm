@@ -171,8 +171,12 @@ sub BUILD {
             log4perl.appender.PROXY.layout=PatternLayout
             log4perl.appender.PROXY.layout.ConversionPattern=%d{HH:mm:ss} %18c{2} [%4L]: %m%n
         });
-        $self->proxy(Log::Log4perl->appender_by_name('PROXY'));
     }
+    my $proxy = Log::Log4perl->appender_by_name('PROXY');
+    unless ( UNIVERSAL::isa($proxy, 'Log::Log4perl::Appender::CatalystProxy') ) {
+        die q{Can't find the PROXY Log4perl Appender};
+    }
+    $self->proxy($proxy);
 }
 
 
